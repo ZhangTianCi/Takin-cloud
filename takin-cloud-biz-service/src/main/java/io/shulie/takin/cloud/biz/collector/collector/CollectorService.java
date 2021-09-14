@@ -10,8 +10,6 @@ import java.util.concurrent.*;
 import javax.annotation.Resource;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.pamirs.takin.entity.dao.report.TReportMapper;
-import com.pamirs.takin.entity.domain.entity.report.Report;
 import io.shulie.takin.cloud.biz.output.scene.manage.SceneManageWrapperOutput;
 import io.shulie.takin.cloud.biz.service.async.AsyncService;
 import io.shulie.takin.cloud.biz.service.log.PushLogService;
@@ -28,8 +26,10 @@ import io.shulie.takin.cloud.common.exception.TakinCloudExceptionEnum;
 import io.shulie.takin.cloud.common.redis.RedisClientUtils;
 import io.shulie.takin.cloud.common.utils.CollectorUtil;
 import io.shulie.takin.cloud.common.utils.GsonUtil;
+import io.shulie.takin.cloud.data.dao.report.ReportDAO;
 import io.shulie.takin.cloud.data.dao.sceneTask.SceneTaskPressureTestLogUploadDAO;
-import io.shulie.takin.cloud.data.dao.scenemanage.SceneManageDAO;
+import io.shulie.takin.cloud.data.dao.scene.manage.SceneManageDAO;
+import io.shulie.takin.cloud.data.model.mysql.ReportEntity;
 import io.shulie.takin.utils.json.JsonHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -51,7 +51,7 @@ public class CollectorService extends AbstractIndicators {
     private static final Map<String, List<String>> cacheTasks = new ConcurrentHashMap<>();
 
     @Resource
-    private TReportMapper tReportMapper;
+    private ReportDAO reportDao;
     @Autowired
     private RedisClientUtils redisClientUtils;
     @Autowired
@@ -196,7 +196,7 @@ public class CollectorService extends AbstractIndicators {
             .format(SceneTaskRedisConstants.SCENE_TASK_RUN_KEY + "%s_%s", sceneId, reportId);
         //任务状态记录到redis
         redisTemplate.opsForHash().put(tryRunTaskKey, SceneTaskRedisConstants.SCENE_RUN_TASK_STATUS_KEY, status.getText());
-        Report report = tReportMapper.selectByPrimaryKey(reportId);
+        ReportEntity report = reportDao.selectByPrimaryKey(reportId);
         if (Objects.nonNull(report) && report.getPressureType() != PressureTypeEnums.FLOW_DEBUG.getCode()
             && report.getPressureType() != PressureTypeEnums.INSPECTION_MODE.getCode()
             && status.getCode() == SceneRunTaskStatusEnum.STARTED.getCode()

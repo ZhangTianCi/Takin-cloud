@@ -27,11 +27,6 @@
         from t_scene_script_ref
         where id = #{id,jdbcType=BIGINT}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete
-        from t_scene_script_ref
-        where id = #{id,jdbcType=BIGINT}
-    </delete>
 
     <delete id="deleteByIds">
         delete from t_scene_script_ref
@@ -216,7 +211,9 @@
     </select>
 
     <delete id="deleteBySceneId">
-        delete from t_scene_script_ref where scene_id = #{id,jdbcType=BIGINT}
+        delete
+        from t_scene_script_ref
+        where scene_id = #{id,jdbcType=BIGINT}
 
     </delete>
 </mapper>

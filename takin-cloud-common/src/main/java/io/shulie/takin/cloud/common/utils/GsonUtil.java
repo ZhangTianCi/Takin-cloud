@@ -31,9 +31,6 @@ public class GsonUtil {
     public static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     public static final Gson GSON = new GsonBuilder()
-        //            .generateNonExecutableJson()
-        //            .registerTypeAdapter()
-        //            .registerTypeAdapterFactory(new CglibProxyFactory())
         .registerTypeAdapterFactory(new TypeAdapterFactory() {
             @Override
             public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
@@ -61,49 +58,6 @@ public class GsonUtil {
             result = GSON.toJson(object);
         }
         return EMPTY_JSON.equals(result) ? GsonUtil.EMPTY_STRING : result;
-    }
-
-    //    public static void main(String[] args) {
-    //        Map<String, Object> anonymousClassMap = new HashMap<String, Object>() {
-    //            private static final long serialVersionUID = 1L;
-    //
-    //            {
-    //                put("item", 10135668);
-    //                put("color", "black");
-    //            }
-    //        };
-    //        String gsonSerializeAnonymousClass = new Gson().toJson(anonymousClassMap);
-    //        System.out.println("gsonSerializeAnonymousClass=" + gsonSerializeAnonymousClass);
-    //
-    //        Map<String, Object> gsonSerializeMap = Maps.newHashMap();
-    //        gsonSerializeMap.put("item", 10135668);
-    //        gsonSerializeMap.put("color", null);
-    //        String gsonSerializeMapResult = new Gson().toJson(gsonSerializeMap);
-    //        System.out.println("gsonSerializeMapResult=" + gsonSerializeMapResult);
-    //
-    //        ObjectMapper objectMapper = new ObjectMapper();
-    //        try {
-    //            String jacsongSerializeAnonymousClassResult = objectMapper.writeValueAsString(anonymousClassMap);
-    //            System.out.println("jacsongSerializeAnonymousClassResult=" + jacsongSerializeAnonymousClassResult);
-    //        } catch (JsonProcessingException e) {
-    //            e.printStackTrace();
-    //        }
-    //
-    //        String fastJsonSerializeAnonymousClassResult = JSON.toJSONString(anonymousClassMap);
-    //        System.out.println("fastJsonSerializeAnonymousClassResult=" + fastJsonSerializeAnonymousClassResult);
-    //
-    //    }
-
-    /**
-     * 说明: 将对象转化为字符串(泛型实现)
-     *
-     * @param t 泛型对象
-     * @return -
-     * @author shulie
-     * @date 2018/7/16 10:40
-     */
-    public static <T> String gsonToStringWithGeneric(T t) {
-        return Strings.nullToEmpty(GSON.toJson(t));
     }
 
     /**

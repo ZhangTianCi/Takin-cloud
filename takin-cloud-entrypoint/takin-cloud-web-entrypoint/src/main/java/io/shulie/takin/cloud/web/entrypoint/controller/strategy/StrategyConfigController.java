@@ -6,7 +6,6 @@ import javax.validation.Valid;
 
 import com.pamirs.takin.entity.domain.dto.strategy.StrategyConfigDetailDTO;
 import com.pamirs.takin.entity.domain.vo.strategy.StrategyConfigAddVO;
-import com.pamirs.takin.entity.domain.vo.strategy.StrategyConfigQueryVO;
 import com.pamirs.takin.entity.domain.vo.strategy.StrategyConfigUpdateVO;
 import io.shulie.takin.cloud.biz.service.strategy.StrategyConfigService;
 import io.shulie.takin.cloud.web.entrypoint.request.scenemanage.SceneManageDeleteRequest;
@@ -64,17 +63,9 @@ public class StrategyConfigController {
 
     @GetMapping("/list")
     @ApiOperation(value = "分配策略列表")
-    public ResponseResult<List<StrategyConfigExt>> getList(@ApiParam(name = "current", value = "页码") Integer current,
-                                                           @ApiParam(name = "pageSize", value = "页大小") Integer pageSize) {
-
-        /*
-         * 1、封装参数
-         * 2、调用查询服务
-         * 3、返回指定格式
-         */
-        StrategyConfigQueryVO queryVO = new StrategyConfigQueryVO();
-        queryVO.setCurrentPage(current);
-        queryVO.setPageSize(pageSize);
-        return ResponseResult.success(strategyConfigService.queryPageList(queryVO).getList());
+    public ResponseResult<List<StrategyConfigExt>> getList(
+        @ApiParam(name = "current", value = "页码") Integer current,
+        @ApiParam(name = "pageSize", value = "页大小") Integer pageSize) {
+        return ResponseResult.success(strategyConfigService.queryPageList(current + 1, pageSize).getList());
     }
 }

@@ -8,13 +8,7 @@ import io.shulie.takin.cloud.common.bean.sla.WarnQueryParam;
 
 public interface TWarnDetailMapper {
 
-    int deleteByPrimaryKey(Long id);
-
     int insertSelective(WarnDetail record);
-
-    WarnDetail selectByPrimaryKey(Long id);
-
-    int updateByPrimaryKeySelective(WarnDetail record);
 
     /**
      * 警告汇总

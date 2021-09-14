@@ -1,6 +1,7 @@
 package io.shulie.takin.cloud.data.model.mysql;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -48,5 +49,5 @@ public class StrategyConfigEntity {
      * 最后更新时间
      */
     @TableField(value = "update_time")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 }

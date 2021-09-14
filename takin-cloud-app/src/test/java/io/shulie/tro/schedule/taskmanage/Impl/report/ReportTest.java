@@ -4,22 +4,21 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.pamirs.takin.entity.dao.report.TReportMapper;
-import com.pamirs.takin.entity.dao.scene.manage.TWarnDetailMapper;
-import com.pamirs.takin.entity.domain.entity.report.Report;
-import com.pamirs.takin.entity.domain.entity.scene.manage.WarnDetail;
-import io.shulie.takin.app.Application;
-import io.shulie.takin.cloud.biz.output.report.ReportDetailOutput;
-import io.shulie.takin.cloud.biz.service.report.ReportService;
-import io.shulie.takin.cloud.common.bean.sla.WarnQueryParam;
-import io.shulie.takin.cloud.data.mapper.mysql.ReportMapper;
-import io.shulie.takin.cloud.data.model.mysql.ReportEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.shulie.takin.app.Application;
+import io.shulie.takin.cloud.data.dao.report.ReportDAO;
+import io.shulie.takin.cloud.data.model.mysql.ReportEntity;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
+import io.shulie.takin.cloud.data.mapper.mysql.ReportMapper;
+import io.shulie.takin.cloud.common.bean.sla.WarnQueryParam;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import io.shulie.takin.cloud.biz.service.report.ReportService;
+import io.shulie.takin.cloud.biz.output.report.ReportDetailOutput;
+import com.pamirs.takin.entity.dao.scene.manage.TWarnDetailMapper;
+import com.pamirs.takin.entity.domain.entity.scene.manage.WarnDetail;
 
 /**
  * @author mubai
@@ -41,7 +40,7 @@ public class ReportTest {
     private ReportService reportService;
 
     @Resource
-    private TReportMapper tReportMapper;
+    private ReportDAO reportDao;
 
     @Test
     public void testQuery() {
@@ -60,7 +59,7 @@ public class ReportTest {
 
     @Test
     public void testTreport() {
-        Report report = tReportMapper.selectByPrimaryKey(610L);
+        ReportEntity report = reportDao.selectByPrimaryKey(610L);
         System.out.println(report);
     }
 
@@ -69,15 +68,4 @@ public class ReportTest {
         ReportDetailOutput reportByReportId = reportService.getReportByReportId(610L);
         System.out.println(reportByReportId);
     }
-
-    //    @Test
-    //    public void insert() {
-    //        Report report = new Report();
-    //        report.setSceneId(11L);
-    //        report.setSceneName("ss");
-    //        report.setStartTime(new Date());
-    //
-    //        tReportMapper.insertSelective(report);
-    //    }
-
 }

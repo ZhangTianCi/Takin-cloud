@@ -10,8 +10,6 @@ import com.pamirs.takin.entity.domain.entity.scene.manage.SceneScriptRef;
 @Mapper
 public interface TSceneScriptRefMapper {
 
-    int deleteByPrimaryKey(Long id);
-
     int deleteByIds(@Param("ids") List<Long> ids);
 
     Long insertSelective(SceneScriptRef record);

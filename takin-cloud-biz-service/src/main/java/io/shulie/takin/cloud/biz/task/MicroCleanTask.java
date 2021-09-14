@@ -12,7 +12,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.shulie.takin.cloud.common.constants.PressureInstanceRedisKey;
 import io.shulie.takin.cloud.common.constants.ScheduleConstants;
 import io.shulie.takin.cloud.common.utils.EnginePluginUtils;
-import io.shulie.takin.cloud.data.dao.scenemanage.SceneManageDAO;
+import io.shulie.takin.cloud.data.dao.scene.manage.SceneManageDAO;
 import io.shulie.takin.cloud.data.result.scenemanage.SceneManageListResult;
 import io.shulie.takin.ext.api.EngineCallExtApi;
 import io.shulie.takin.ext.content.enginecall.ScheduleStopRequestExt;
@@ -53,7 +53,7 @@ public class MicroCleanTask implements InitializingBean {
 
     private final static ExecutorService THREAD_POOL = new ThreadPoolExecutor(2, 6,
             0L, TimeUnit.MILLISECONDS,
-            new LinkedBlockingQueue<Runnable>(256), new ThreadFactoryBuilder()
+        new LinkedBlockingQueue<>(256), new ThreadFactoryBuilder()
             .setNameFormat("micro-clean-task-%d").build(), new ThreadPoolExecutor.AbortPolicy());
 
 

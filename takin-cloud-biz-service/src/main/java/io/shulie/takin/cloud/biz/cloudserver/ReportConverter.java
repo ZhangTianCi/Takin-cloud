@@ -2,6 +2,7 @@ package io.shulie.takin.cloud.biz.cloudserver;
 
 import java.util.List;
 
+import io.shulie.takin.cloud.data.model.mysql.ReportBusinessActivityDetailEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -125,5 +126,5 @@ public interface ReportConverter {
      * @param data -
      * @return -
      */
-    List<BusinessActivityDTO> ofBusinessActivity(List<ReportBusinessActivityDetail> data);
+    List<BusinessActivityDTO> ofBusinessActivity(List<ReportBusinessActivityDetailEntity> data);
 }

@@ -15,6 +15,7 @@ import io.shulie.takin.cloud.biz.output.scene.manage.SceneManageListOutput;
 import io.shulie.takin.cloud.biz.output.scene.manage.SceneManageWrapperOutput;
 import io.shulie.takin.cloud.common.bean.RuleBean;
 import io.shulie.takin.cloud.common.constants.SceneManageConstant;
+import io.shulie.takin.cloud.data.model.mysql.SceneBusinessActivityRefEntity;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -75,8 +76,7 @@ public interface SceneManageDTOConvert {
         dto.setTargetSA(jsonObject.getBigDecimal(SceneManageConstant.SA));
     }
 
-    List<SceneManageWrapperOutput.SceneBusinessActivityRefOutput> ofBusinessActivityList(List<SceneBusinessActivityRef> sources);
-
+    List<SceneManageWrapperOutput.SceneBusinessActivityRefOutput> ofBusinessActivityList(List<SceneBusinessActivityRefEntity> sources);
 
     @Mappings({
         @Mapping(source = "id", target = "id"),

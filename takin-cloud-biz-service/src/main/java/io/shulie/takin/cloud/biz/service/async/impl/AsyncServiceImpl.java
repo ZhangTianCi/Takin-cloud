@@ -4,26 +4,25 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
-import com.pamirs.takin.entity.dao.report.TReportMapper;
-import com.pamirs.takin.entity.domain.entity.report.Report;
-import com.pamirs.takin.entity.domain.vo.scenemanage.SceneManageStartRecordVO;
-import io.shulie.takin.ext.content.enginecall.ScheduleStartRequestExt;
-import io.shulie.takin.cloud.biz.service.async.AsyncService;
-import io.shulie.takin.cloud.biz.service.scene.SceneManageService;
-import io.shulie.takin.cloud.common.bean.task.TaskResult;
-import io.shulie.takin.cloud.common.constants.ReportConstans;
-import io.shulie.takin.cloud.common.constants.SceneTaskRedisConstants;
-import io.shulie.takin.cloud.common.constants.ScheduleConstants;
-import io.shulie.takin.cloud.common.enums.scenemanage.SceneRunTaskStatusEnum;
-import io.shulie.takin.cloud.common.exception.TakinCloudExceptionEnum;
-import io.shulie.takin.cloud.common.redis.RedisClientUtils;
-import io.shulie.takin.eventcenter.Event;
-import io.shulie.takin.eventcenter.EventCenterTemplate;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
+import io.shulie.takin.eventcenter.Event;
 import org.springframework.stereotype.Service;
+import io.shulie.takin.eventcenter.EventCenterTemplate;
+import io.shulie.takin.cloud.data.dao.report.ReportDAO;
+import org.springframework.scheduling.annotation.Async;
+import io.shulie.takin.cloud.common.bean.task.TaskResult;
+import org.springframework.beans.factory.annotation.Value;
+import io.shulie.takin.cloud.common.redis.RedisClientUtils;
+import io.shulie.takin.cloud.data.model.mysql.ReportEntity;
+import io.shulie.takin.cloud.biz.service.async.AsyncService;
+import io.shulie.takin.cloud.common.constants.ReportConstans;
+import io.shulie.takin.cloud.common.constants.ScheduleConstants;
+import io.shulie.takin.cloud.biz.service.scene.SceneManageService;
+import io.shulie.takin.ext.content.enginecall.ScheduleStartRequestExt;
+import io.shulie.takin.cloud.common.constants.SceneTaskRedisConstants;
+import io.shulie.takin.cloud.common.exception.TakinCloudExceptionEnum;
+import io.shulie.takin.cloud.common.enums.scenemanage.SceneRunTaskStatusEnum;
+import com.pamirs.takin.entity.domain.vo.scenemanage.SceneManageStartRecordVO;
 
 /**
  * @author qianshui
@@ -32,18 +31,14 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class AsyncServiceImpl implements AsyncService {
-
-    @Autowired
-    private RedisClientUtils redisClientUtils;
-
-    @Autowired
-    private EventCenterTemplate eventCenterTemplate;
-
-    @Autowired
-    private SceneManageService sceneManageService;
-
     @Resource
-    private TReportMapper tReportMapper;
+    private ReportDAO reportDao;
+    @Resource
+    private RedisClientUtils redisClientUtils;
+    @Resource
+    private SceneManageService sceneManageService;
+    @Resource
+    private EventCenterTemplate eventCenterTemplate;
 
     /**
      * 压力节点 启动时间超时
@@ -129,7 +124,7 @@ public class AsyncServiceImpl implements AsyncService {
     }
 
     private boolean isReportFinished(Long reportId) {
-        Report report = tReportMapper.selectByPrimaryKey(reportId);
+        ReportEntity report = reportDao.selectByPrimaryKey(reportId);
         return report.getStatus() == ReportConstans.FINISH_STATUS;
     }
 

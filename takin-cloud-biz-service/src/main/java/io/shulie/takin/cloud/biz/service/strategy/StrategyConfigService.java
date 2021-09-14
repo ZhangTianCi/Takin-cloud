@@ -1,13 +1,12 @@
 package io.shulie.takin.cloud.biz.service.strategy;
 
 import com.github.pagehelper.PageInfo;
-import com.pamirs.takin.entity.domain.dto.strategy.StrategyConfigDetailDTO;
-import com.pamirs.takin.entity.domain.vo.strategy.StrategyConfigAddVO;
-import com.pamirs.takin.entity.domain.vo.strategy.StrategyConfigQueryVO;
-import com.pamirs.takin.entity.domain.vo.strategy.StrategyConfigUpdateVO;
+import org.apache.ibatis.annotations.Param;
 import io.shulie.takin.ext.content.enginecall.StrategyConfigExt;
 import io.shulie.takin.ext.content.enginecall.StrategyOutputExt;
-import org.apache.ibatis.annotations.Param;
+import com.pamirs.takin.entity.domain.vo.strategy.StrategyConfigAddVO;
+import com.pamirs.takin.entity.domain.vo.strategy.StrategyConfigUpdateVO;
+import com.pamirs.takin.entity.domain.dto.strategy.StrategyConfigDetailDTO;
 
 /**
  * @author qianshui
@@ -21,7 +20,7 @@ public interface StrategyConfigService {
 
     Boolean delete(@Param("id") Long id);
 
-    PageInfo<StrategyConfigExt> queryPageList(StrategyConfigQueryVO queryVO);
+    PageInfo<StrategyConfigExt> queryPageList(int pageNumber, int pageSize);
 
     StrategyConfigDetailDTO getDetail(Long id);
 

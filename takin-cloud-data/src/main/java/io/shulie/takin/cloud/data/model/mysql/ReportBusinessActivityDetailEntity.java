@@ -146,4 +146,9 @@ public class ReportBusinessActivityDetailEntity {
 
     @TableField(value = "gmt_update")
     private LocalDateTime gmtUpdate;
+    /**
+     * 平均并发数
+     */
+    @TableField(exist = false)
+    private BigDecimal avgConcurrenceNum;
 }

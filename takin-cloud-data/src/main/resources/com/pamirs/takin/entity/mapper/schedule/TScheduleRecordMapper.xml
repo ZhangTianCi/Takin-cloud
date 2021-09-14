@@ -15,17 +15,7 @@
     <sql id="Base_Column_List">
         id, scene_id, task_id,pod_num, pod_class, status, cpu_core_num, memory_size, create_time
     </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from t_schedule_record
-        where id = #{id,jdbcType=BIGINT}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete
-        from t_schedule_record
-        where id = #{id,jdbcType=BIGINT}
-    </delete>
+
     <insert id="insertSelective" parameterType="com.pamirs.takin.entity.domain.entity.schedule.ScheduleRecord"
             keyProperty="id" useGeneratedKeys="true">
         insert into t_schedule_record
@@ -88,45 +78,6 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective"
-            parameterType="com.pamirs.takin.entity.domain.entity.schedule.ScheduleRecord">
-        update t_schedule_record
-        <set>
-            <if test="sceneId != null">
-                scene_id = #{sceneId,jdbcType=BIGINT},
-            </if>
-            <if test="podNum != null">
-                pod_num = #{podNum,jdbcType=INTEGER},
-            </if>
-            <if test="podClass != null">
-                pod_class = #{podClass,jdbcType=VARCHAR},
-            </if>
-            <if test="status != null">
-                status = #{status,jdbcType=TINYINT},
-            </if>
-            <if test="cpuCoreNum != null">
-                cpu_core_num = #{cpuCoreNum,jdbcType=DECIMAL},
-            </if>
-            <if test="memorySize != null">
-                memory_size = #{memorySize,jdbcType=DECIMAL},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-        </set>
-        where id = #{id,jdbcType=BIGINT}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.pamirs.takin.entity.domain.entity.schedule.ScheduleRecord">
-        update t_schedule_record
-        set scene_id     = #{sceneId,jdbcType=BIGINT},
-            pod_num      = #{podNum,jdbcType=INTEGER},
-            pod_class    = #{podClass,jdbcType=VARCHAR},
-            status       = #{status,jdbcType=TINYINT},
-            cpu_core_num = #{cpuCoreNum,jdbcType=DECIMAL},
-            memory_size  = #{memorySize,jdbcType=DECIMAL},
-            create_time  = #{createTime,jdbcType=TIMESTAMP}
-        where id = #{id,jdbcType=BIGINT}
-    </update>
 
     <select id="getPageList" parameterType="com.pamirs.takin.entity.domain.vo.schedule.ScheduleRecordQueryVO"
             resultMap="BaseResultMap">

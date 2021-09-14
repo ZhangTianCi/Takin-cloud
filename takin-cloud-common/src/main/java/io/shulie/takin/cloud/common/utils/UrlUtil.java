@@ -42,26 +42,4 @@ public class UrlUtil {
         //endWith 匹配 网关转发时，加前缀的情况 /partner-open-api  网关转发，去前缀的情况 /api
         return pradarPath.equals(jmeterPath) || pradarPath.endsWith(jmeterPath) || jmeterPath.endsWith(pradarPath);
     }
-
-    /**
-     * 删除字符串中，冒号及之前的字符
-     *
-     * @param str -
-     * @return -
-     */
-    private static String deleteFront(String str) {
-        if (StringUtils.isBlank(str)) {
-            return str;
-        }
-        int index = str.lastIndexOf(":");
-        if (index == -1) {
-            return str;
-        }
-        str = str.substring(index + 1);
-        if (StringUtils.startsWith(str, "/")) {
-            str = str.substring(1);
-        }
-        index = str.indexOf("/");
-        return str.substring(index + 1);
-    }
 }

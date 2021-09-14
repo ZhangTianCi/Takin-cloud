@@ -1,35 +1,29 @@
 package io.shulie.takin.cloud.biz.service.strategy.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-
-import cn.hutool.core.date.DateUtil;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Lists;
-import com.pamirs.takin.entity.dao.strategy.TStrategyConfigMapper;
-import com.pamirs.takin.entity.domain.dto.strategy.StrategyConfigDetailDTO;
-import com.pamirs.takin.entity.domain.entity.strategy.StrategyConfig;
-import com.pamirs.takin.entity.domain.vo.strategy.StrategyConfigAddVO;
-import com.pamirs.takin.entity.domain.vo.strategy.StrategyConfigQueryVO;
-import com.pamirs.takin.entity.domain.vo.strategy.StrategyConfigUpdateVO;
-import io.shulie.takin.cloud.biz.service.strategy.StrategyConfigService;
-import io.shulie.takin.cloud.common.enums.deployment.DeploymentMethodEnum;
-import io.shulie.takin.cloud.common.exception.TakinCloudExceptionEnum;
-import io.shulie.takin.cloud.common.utils.EnginePluginUtils;
-import io.shulie.takin.ext.api.EngineCallExtApi;
-import io.shulie.takin.ext.content.enginecall.StrategyConfigExt;
-import io.shulie.takin.ext.content.enginecall.StrategyOutputExt;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.math.BigDecimal;
 
 import javax.annotation.Resource;
 
-import java.math.BigDecimal;
-import java.util.List;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
+import lombok.extern.slf4j.Slf4j;
+import cn.hutool.core.date.DateUtil;
+import com.github.pagehelper.PageInfo;
+import org.springframework.stereotype.Service;
+import io.shulie.takin.ext.api.EngineCallExtApi;
+import io.shulie.takin.cloud.common.utils.EnginePluginUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import io.shulie.takin.ext.content.enginecall.StrategyConfigExt;
+import io.shulie.takin.ext.content.enginecall.StrategyOutputExt;
+import io.shulie.takin.cloud.data.dao.strategy.StrategyConfigDAO;
+import io.shulie.takin.cloud.data.model.mysql.StrategyConfigEntity;
+import com.pamirs.takin.entity.domain.vo.strategy.StrategyConfigAddVO;
+import io.shulie.takin.cloud.common.exception.TakinCloudExceptionEnum;
+import io.shulie.takin.cloud.biz.service.strategy.StrategyConfigService;
+import com.pamirs.takin.entity.domain.vo.strategy.StrategyConfigUpdateVO;
+import io.shulie.takin.cloud.common.enums.deployment.DeploymentMethodEnum;
+import com.pamirs.takin.entity.domain.dto.strategy.StrategyConfigDetailDTO;
 
 /**
  * @author qianshui
@@ -38,44 +32,39 @@ import java.util.List;
 @Slf4j
 @Service
 public class StrategyConfigServiceImpl implements StrategyConfigService {
-
     @Resource
-    private TStrategyConfigMapper tStrategyConfigMapper;
-
+    StrategyConfigDAO strategyConfigDao;
     @Autowired
     private EnginePluginUtils pluginUtils;
 
     @Override
     public Boolean add(StrategyConfigAddVO addVO) {
-        StrategyConfig config = new StrategyConfig();
+        StrategyConfigEntity config = new StrategyConfigEntity();
         config.setStrategyName(addVO.getStrategyName());
         config.setStrategyConfig(addVO.getStrategyConfig());
-        tStrategyConfigMapper.insert(config);
+        strategyConfigDao.insert(config);
         return true;
     }
 
     @Override
     public Boolean update(StrategyConfigUpdateVO updateVO) {
-        StrategyConfig config = new StrategyConfig();
+        StrategyConfigEntity config = new StrategyConfigEntity();
         config.setId(updateVO.getId());
         config.setStrategyName(updateVO.getStrategyName());
         config.setStrategyConfig(updateVO.getStrategyConfig());
-        tStrategyConfigMapper.updateByPrimaryKeySelective(config);
+        strategyConfigDao.updateByPrimaryKeySelective(config);
         return true;
     }
 
     @Override
     public Boolean delete(Long id) {
-        tStrategyConfigMapper.deleteByPrimaryKey(id);
-        return true;
+        return strategyConfigDao.deleteByPrimaryKey(id);
     }
 
     @Override
     public StrategyConfigDetailDTO getDetail(Long id) {
-        StrategyConfig strategyConfig = tStrategyConfigMapper.selectByPrimaryKey(id);
-        if (strategyConfig == null) {
-            return null;
-        }
+        StrategyConfigEntity strategyConfig = strategyConfigDao.selectByPrimaryKey(id);
+        if (strategyConfig == null) {return null;}
         StrategyConfigDetailDTO dto = new StrategyConfigDetailDTO();
         dto.setStrategyName(strategyConfig.getStrategyName());
         dto.setStrategyConfig(strategyConfig.getStrategyConfig());
@@ -99,25 +88,15 @@ public class StrategyConfigServiceImpl implements StrategyConfigService {
     }
 
     @Override
-    public PageInfo<StrategyConfigExt> queryPageList(StrategyConfigQueryVO queryVO) {
-        Page<?> pageInfo = PageHelper.startPage(queryVO.getCurrentPage() + 1, queryVO.getPageSize());
-        List<StrategyConfig> queryList = tStrategyConfigMapper.getPageList(queryVO);
-        if (CollectionUtils.isEmpty(queryList)) {
-            return new PageInfo<>(Lists.newArrayList());
-        }
-        List<StrategyConfigExt> resultList = Lists.newArrayList();
-        queryList.forEach(data -> {
+    public PageInfo<StrategyConfigExt> queryPageList(int pageNumber, int pageSize) {
+        return strategyConfigDao.queryPageList(pageNumber, pageSize, t -> {
             StrategyConfigExt dto = new StrategyConfigExt();
-            dto.setId(data.getId());
-            dto.setStrategyName(data.getStrategyName());
-            parseConfig(dto, data.getStrategyConfig());
-            dto.setUpdateTime(DateUtil.formatDateTime(data.getUpdateTime()));
-            resultList.add(dto);
+            dto.setId(t.getId());
+            dto.setStrategyName(t.getStrategyName());
+            parseConfig(dto, t.getStrategyConfig());
+            dto.setUpdateTime(DateUtil.formatDateTime(t.getUpdateTime()));
+            return dto;
         });
-
-        return new PageInfo<StrategyConfigExt>(resultList) {{
-            setTotal(pageInfo.getTotal());
-        }};
     }
 
     private void parseConfig(StrategyConfigExt dto, String config) {

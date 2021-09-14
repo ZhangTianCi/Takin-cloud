@@ -2,26 +2,28 @@ package io.shulie.takin.cloud.common.enums.scenemanage;
 
 import java.util.List;
 
+import lombok.Getter;
 import com.google.common.collect.Lists;
 
 /**
  * @author qianshui
  * @date 2020/4/27 上午11:20
  */
+@Getter
 public enum SceneManageStatusEnum {
     /**
      * 待启动
      */
     WAIT(0, "待启动"),
-    JOB_CREATEING(3, "job创建中"),
+    JOB_CREATING(3, "job创建中"),
     PRESSURE_NODE_RUNNING(4, "压力节点工作中"),
     ENGINE_RUNNING(5, "压测引擎已启动"),
     STARTING(1, "启动中"),
     PTING(2, "压测中"),
     STOP(6, "压测引擎停止压测"),
     //特殊情况
-    FILESPLIT_RUNNING(7, "文件拆分中"),
-    FILESPLIT_END(8, "文件拆分完成"),
+    FILE_SPLIT_RUNNING(7, "文件拆分中"),
+    FILE_SPLIT_END(8, "文件拆分完成"),
     FAILED(9, "压测失败"),
     // 强制停止两个都停止
     FORCE_STOP(10, "强制停止");
@@ -56,10 +58,10 @@ public enum SceneManageStatusEnum {
     public static List<SceneManageStatusEnum> getStarting() {
         List<SceneManageStatusEnum> starting = Lists.newArrayList();
         starting.add(STARTING);
-        starting.add(JOB_CREATEING);
+        starting.add(JOB_CREATING);
         starting.add(PRESSURE_NODE_RUNNING);
-        starting.add(FILESPLIT_RUNNING);
-        starting.add(FILESPLIT_END);
+        starting.add(FILE_SPLIT_RUNNING);
+        starting.add(FILE_SPLIT_END);
         return starting;
     }
 
@@ -76,21 +78,13 @@ public enum SceneManageStatusEnum {
         return working;
     }
 
-    private Integer value;
+    private final Integer value;
 
-    private String desc;
+    private final String desc;
 
     SceneManageStatusEnum(Integer value, String desc) {
         this.value = value;
         this.desc = desc;
-    }
-
-    public Integer getValue() {
-        return this.value;
-    }
-
-    public String getDesc() {
-        return this.desc;
     }
 
     public static SceneManageStatusEnum getSceneManageStatusEnum(Integer status) {
